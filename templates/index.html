@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pattern Generator Demo</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Pattern Generator Demo</h1>
+      <p>Spray image/GIF → ordered bullet points → <code>(dx, dy, delay)</code> → Lua-ready steps</p>
+    </header>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>1. Load spray</h2>
+        <div class="row">
+          <input type="file" id="file" accept="image/*,.gif" />
+          <select id="detectStyle">
+            <option value="generic">Detect: still / generic</option>
+            <option value="gif" selected>Detect: GIF timeline (frame-diff)</option>
+          </select>
+          <button id="detectBtn" type="button">Auto-Suggest</button>
+        </div>
+        <div class="row">
+          <input id="url" type="url" placeholder="Or paste image/GIF URL…" />
+          <button id="loadUrlBtn" type="button">Load URL</button>
+          <button id="sampleBtn" type="button">Load sample AK GIF</button>
+        </div>
+        <p class="hint">Still images guess order (top→bottom). GIFs use frame-diff for shot order — then fix manually.</p>
+
+        <div class="canvas-wrap">
+          <canvas id="canvas" width="640" height="480"></canvas>
+        </div>
+        <div id="frameControls" class="row hidden">
+          <label>Frame <span id="frameLabel">1/1</span></label>
+          <input id="frameSlider" type="range" min="0" max="0" value="0" />
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>2. Points &amp; generate</h2>
+        <p class="hint">Left-click canvas = add point · Right-click = undo last</p>
+        <div class="row">
+          <button id="clearBtn" type="button">Clear points</button>
+          <button id="generateBtn" type="button" class="primary">Generate Pattern</button>
+          <button id="copyBtn" type="button">Copy CSV</button>
+          <button id="copyLuaBtn" type="button">Copy Lua</button>
+        </div>
+
+        <div class="controls">
+          <label>Delay ms <input id="delayMs" type="number" value="90" min="1" /></label>
+          <label>Scale X <input id="scaleX" type="number" value="1" step="0.05" /></label>
+          <label>Scale Y <input id="scaleY" type="number" value="1" step="0.05" /></label>
+          <label><input id="invertX" type="checkbox" checked /> Invert X</label>
+          <label><input id="invertY" type="checkbox" checked /> Invert Y</label>
+        </div>
+
+        <h3>Points (<span id="pointCount">0</span>)</h3>
+        <ol id="pointsList" class="points"></ol>
+
+        <h3>Output CSV <code>dx,dy,delay_ms</code></h3>
+        <textarea id="output" rows="10" readonly placeholder="Generate to see steps…"></textarea>
+
+        <h3>Lua sketch</h3>
+        <textarea id="luaOut" rows="8" readonly placeholder="Runtime form: dx * kava * SensSetting…"></textarea>
+
+        <p id="status" class="status">Ready.</p>
+      </section>
+    </div>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
